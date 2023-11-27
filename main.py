@@ -10,7 +10,11 @@ from classes_lib.Grafo import Grafo
 if __name__ == "__main__":
     g = Grafo("_input/USA-NY-road.txt")
     #g.ExibirGrafo()
-    print(g.m()) 
+    #g.ExibirVertice("4162")
+    print(g.m())
     print(g.n())
-    print(g.vizinhanca("10000"))
+    #print(g.vizinhanca("4162"))
+    #print(g.d("4162"))
+    #print(g.w("4162", "4161"))
+    print(g.minD)
     #main()
