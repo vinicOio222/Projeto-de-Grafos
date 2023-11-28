@@ -18,7 +18,7 @@ class Grafo:
         with open(caminho, "+r") as input:
             linhas = input.readlines()[7:]       # Começa a ler a partir da linha 8
         
-        print("Arestas: ", len(linhas), "\n\n")
+        #print("Arestas: ", len(linhas), "\n\n")
         for input in linhas:
             palavras = input.split(" ")     #Splita cada elemento divididos por um " ", e coloca em cada variável, execeto o "a"
             vertice1, vertice2, peso = palavras[1], palavras[2], palavras[3]
@@ -47,9 +47,6 @@ class Grafo:
         #     arestas.add(i)
         # return len(i)
     
-    def vizinhanca(self, vertice):
-        vizinhos = self.listaAdjacencia.get(vertice)
-        return vizinhos
 
     def d(self, vertice):
         grau = len(self.listaAdjacencia[vertice])
@@ -60,13 +57,26 @@ class Grafo:
             if vertice[0] == vertice2:
                 return vertice[1]
             
-    def minD(self): # Ainda não tá funcionando
-        grauMin = 0
-        aux = 0
-        for key, value in self.listaAdjacencia.items():
-            aux = len(value)
-            if grauMin > aux:
-                grauMin = aux
+    def vizinhanca(self, vertice):
+        vizinhos = self.listaAdjacencia.get(vertice)
+        return vizinhos
+    
+    def dist(self, vertice):
+        vizinhanca = self.vizinhanca(vertice)
+        return len(vizinhanca)
+    
+    def minD(self):
+        grauMin = min(self.dist(vertice) for vertice in self.listaAdjacencia.keys())
         return grauMin
 
-    #def maxd(self):
+    def maxD(self):
+        grauMax = max(self.dist(vertice) for vertice in self.listaAdjacencia.keys())
+        return grauMax
+    
+    #def bfs(self, vertice):
+        
+    # def dfs(self, vertice):
+    #     visitados = []
+        
+    #     while not visitados.empty():
+            
