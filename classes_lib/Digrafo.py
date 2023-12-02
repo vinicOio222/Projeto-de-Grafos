@@ -92,6 +92,24 @@ class Digrafo:
         """
         return sum([len(vizinhos["positivo"]) + len(vizinhos["negativo"]) for vizinhos in self.listaAdjacencia.values()]) // 2
 
+    def w(self, vertice1, vertice2):
+        """
+        Retorna o peso de uma aresta.
+
+        Parâmetros:
+        - vertice1 (str): O vértice de origem da aresta.
+        - vertice2 (str): O vértice de destino da aresta.
+
+        Retorna:
+        - peso (int): O peso da aresta.
+
+        """
+        vizinhos, _ = self.vizinhanca(vertice1)
+        for i, peso in vizinhos:
+            if i == vertice2:
+                return peso
+        return None
+
     def minD(self):
         """
         Retorna o menor grau de um vértice do digrafo.
