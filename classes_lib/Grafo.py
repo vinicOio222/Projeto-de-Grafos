@@ -1,3 +1,4 @@
+from collections import deque
 import heapq
 import operator
 
@@ -6,6 +7,8 @@ class Grafo:
     def __init__(self, caminho = str):
         self.listaAdjacencia: dict[str, list[tuple[str, int]]] = {}
         self.LerArquivo(caminho)
+        
+    
 
     def ExibirGrafo(self):
         for vertice in self.listaAdjacencia.keys():
@@ -37,15 +40,13 @@ class Grafo:
     def n(self):
         return len(self.listaAdjacencia)
     
-    def m(self):    # Está retornando um valor menor do que o numero esperado de arestas
+    # Está retornando um valor menor do que o numero esperado de arestas
+    def m(self):
         arestas = set()
         for arestasLista in self.listaAdjacencia.values():
             for i in arestasLista:
                 arestas.add(i)
         return len(arestas)
-        # for i in self.listaAdjacencia.values():
-        #     arestas.add(i)
-        # return len(i)
     
 
     def d(self, vertice):
@@ -58,6 +59,12 @@ class Grafo:
                 return vertice[1]
             
     def vizinhanca(self, vertice):
+        # Retorna todos os vizinhos do vertice de entrada sem os pesos das arestas
+        vizinhos = [vizinho[0] for vizinho in self.listaAdjacencia[vertice]]
+        return vizinhos
+    
+    def vizinhaca_com_peso(self, vertice):
+        # Retorna todos os vizinhos do vertice de entrada junto com o respectivo peso de cada aresta
         vizinhos = self.listaAdjacencia.get(vertice)
         return vizinhos
     
@@ -73,10 +80,25 @@ class Grafo:
         grauMax = max(self.dist(vertice) for vertice in self.listaAdjacencia.keys())
         return grauMax
     
-    #def bfs(self, vertice):
+    def bfs(self, raiz):
+        visitados = set()
+        Q = deque()
+        Q.append(raiz)
         
-    # def dfs(self, vertice):
-    #     visitados = []
-        
-    #     while not visitados.empty():
+        # Continua o processo até a fila ficar vazia
+        while Q:
+            vertice = Q.popleft()
             
+            # Isso aqui é pra prevenir no caso do vertice popado já estar nos visitados, mas funcionaria sem isso, pois os visitados são um set()
+            if vertice in visitados:
+                continue
+            
+            visitados.add(vertice)
+            vizinhos = self.vizinhanca(vertice)
+            for i in vizinhos:
+                if i not in visitados:
+                    Q.append(i)
+                
+        return visitados
+            
+    # def dfs(self, vertice):
