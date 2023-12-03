@@ -8,7 +8,8 @@ from classes_lib.Grafo import Grafo
 #     )
 
 if __name__ == "__main__":
-    g = Grafo("_input/USA-NY-road.txt")
+    # g = Grafo("_input/USA-NY-road.txt")
+    g = Grafo("_input/Teste-graph.txt")
     #g.ExibirGrafo()
     # g.ExibirVertice("4162")
     # print(g.m())
@@ -23,6 +24,8 @@ if __name__ == "__main__":
     
     # print(g.dfs("10000"))
     
-    print(g.bfs("15000"))
+    # print(g.bfs("1")[0])
+    # print(g.dfs("1")[2])
+    print(g.djikstra("1"))
     
     #main()

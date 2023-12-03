@@ -1,14 +1,15 @@
 from collections import deque
-import heapq
+import heapq as hq
 import operator
 
 class Grafo:
     
+    
+    MAX_TAM = float('inf')
+    
     def __init__(self, caminho = str):
         self.listaAdjacencia: dict[str, list[tuple[str, int]]] = {}
         self.LerArquivo(caminho)
-        
-    
 
     def ExibirGrafo(self):
         for vertice in self.listaAdjacencia.keys():
@@ -19,7 +20,9 @@ class Grafo:
                 
     def LerArquivo(self, caminho):
         with open(caminho, "+r") as input:
-            linhas = input.readlines()[7:]       # Começa a ler a partir da linha 8
+            # Começa a ler a partir da linha 8
+            # linhas = input.readlines()[7:]
+            linhas = input.readlines()[1:]
         
         #print("Arestas: ", len(linhas), "\n\n")
         for input in linhas:
@@ -81,24 +84,93 @@ class Grafo:
         return grauMax
     
     def bfs(self, raiz):
+        d = 0
+        pi = None
+        dict_dist = {}
+        dict_ant = {}
         visitados = set()
-        Q = deque()
-        Q.append(raiz)
+        fila = deque()
+        
+        dict_dist[raiz] = 0
+        dict_ant[raiz] = None
+        fila.append(raiz)
         
         # Continua o processo até a fila ficar vazia
-        while Q:
-            vertice = Q.popleft()
+        while fila:
+            vertice = fila.popleft()
+
+            visitados.add(vertice)
+            d += 1
+            pi = vertice
+            vizinhos = self.vizinhanca(vertice)
+            for i in vizinhos:
+                if i not in visitados:
+                    dict_dist[i] = d
+                    dict_ant = pi
+                    fila.append(i)
+                
+        return dict_dist, dict_ant
             
-            # Isso aqui é pra prevenir no caso do vertice popado já estar nos visitados, mas funcionaria sem isso, pois os visitados são um set()
+    def dfs(self, raiz):
+        visitados = set()
+        cont = 0
+        antecessor = None
+        dicIni = {}
+        dicFim = {}
+        fila = deque()
+        
+        dicpi = {}
+        
+        fila.append(raiz)
+        
+        while fila:
+            
+            vertice = fila.popleft()
+            if vertice not in visitados:
+                visitados.add(vertice)
+                cont += 1
+                dicIni[vertice] = cont
+                
+                dicpi[vertice] = antecessor
+                antecessor = vertice
+                
+                vizinhos = self.vizinhanca(vertice)
+                for i in vizinhos:
+                    if i not in visitados and i not in fila:
+                        fila.append(i)
+                        
+        visitados = sorted(visitados, reverse = True)
+        for vertice in visitados:
+            cont += 1
+            dicFim[vertice] = cont
+            
+        return dicIni, dicFim, dicpi
+    
+    def djikstra(self, raiz):
+        d = {}
+        pi = {}
+        fila = []
+        visitados = set()
+        
+        d = {vertice : self.MAX_TAM for vertice in self.listaAdjacencia.keys()}
+        pi = {vertice : None for vertice in self.listaAdjacencia.keys()}
+        
+        d[raiz] = 0
+        
+        hq.heappush(fila, raiz)
+        
+        while fila:
+            vertice = hq.heappop(fila)
             if vertice in visitados:
                 continue
             
             visitados.add(vertice)
-            vizinhos = self.vizinhanca(vertice)
-            for i in vizinhos:
-                if i not in visitados:
-                    Q.append(i)
-                
-        return visitados
-            
-    # def dfs(self, vertice):
+            vizinhos = self.vizinhaca_com_peso(vertice)
+            for vizinho, peso in vizinhos:
+                if d[vizinho] > d[vertice] + peso:
+                    d[vizinho] = d[vertice] + peso
+                    pi[vizinho] = vertice
+                    hq.heappush(fila, vizinho)
+                             
+        return d, pi
+        
