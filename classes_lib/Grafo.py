@@ -146,6 +146,30 @@ class Grafo:
             
         return dicIni, dicFim, dicpi
     
+    def bf(self, raiz):
+        d = {}
+        pi = {}
+        d  = {vertice : self.MAX_TAM for vertice in self.listaAdjacencia.keys()}
+        pi = {vertice : None for vertice in self.listaAdjacencia.keys()}
+        
+        d[raiz] = 0
+        
+        for _ in range(self.n() - 1):
+            for vertice in self.listaAdjacencia.keys():
+                vizinhos = self.vizinhaca_com_peso(vertice)
+                for i, peso in vizinhos:
+                    if d[i] > d[vertice] + peso:
+                        d[i] = d[vertice] + peso
+                        pi[i] = vertice
+                        
+        for vertice in self.listaAdjacencia.keys():
+            vizinhos = self.vizinhaca_com_peso(vertice)
+            for i, peso in vizinhos:
+                if d[i] > d[vertice] + peso:
+                    return None, None, "Detectado ciclo negativo"
+        
+        return d, pi, None
+    
     def djikstra(self, raiz):
         d = {}
         pi = {}
@@ -173,4 +197,52 @@ class Grafo:
                     hq.heappush(fila, vizinho)
                              
         return d, pi
+    
+    def caminhoVertice(self, valor, T):
+        visitados = set()
+        caminho = []
+        
+        for vertice in self.listaAdjacencia.keys():
+            if vertice not in visitados:
+                visitados.add(vertice)
+                
+                pai = T[vertice]
+                
+                while pai != None:
+                    caminho.append(pai)
+                    pai = T[pai]
+                
+                if len(caminho) >= valor:
+                    return caminho
+                else:
+                    caminho.clear()
+                    continue
+        
+        return None
+    
+    def checarCiclo(self, T):
+        
+        ciclos = self.caminhoVertice(5, T)
+        
+        ciclosReversos = ciclos.copy()
+        ciclos.reverse()
+        
+        for vertice in ciclos:
+            vizinhos = self.vizinhanca(vertice)
+            for vizinho in vizinhos:
+                if ciclosReversos[0] == vizinho:
+                    index = ciclos.index(vertice)
+                    
+                    if index >= 5:
+                        ciclos = ciclosReversos[0:index]
+                        ciclos.append(ciclosReversos[0])
+                        return ciclos
+        
+        return "Não há ciclos com tamanho >= 5"
+    
+    def verticeMaisDistante(self, raiz):
+        d, _ = self.djikstra(raiz)
+        
+        maior = max(d.items(), key = lambda x: x[1])
+        return maior
         

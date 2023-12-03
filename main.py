@@ -26,6 +26,10 @@ if __name__ == "__main__":
     
     # print(g.bfs("1")[0])
     # print(g.dfs("1")[2])
-    print(g.djikstra("1"))
+    # print(g.djikstra("1"))
+    # print(g.bf("1"))
+    
+    # print(g.verticeMaisDistante("1"))
+    print()
     
     #main()
