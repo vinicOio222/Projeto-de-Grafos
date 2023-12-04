@@ -57,9 +57,9 @@ class Digrafo:
         negativos = self.listaAdjacencia.get(vertice, {}).get("negativo", [])
         return positivos, negativos
 
-    def mostrarGrafo(self):
+    def mostrarDigrafo(self):
         """
-        Mostra o grafo na forma de uma lista de adjacência.
+        Mostra o digrafo na forma de uma lista de adjacência.
 
         -> Exemplo de Saída:
 
@@ -118,7 +118,8 @@ class Digrafo:
         - minD (int): O menor grau de um vértice do digrafo.
 
         """
-        return min(self.dist(vert) for vert in self.listaAdjacencia.keys())
+        return min([(self.dist(vert))[0] for vert in self.listaAdjacencia.keys()])
+
 
     def maxD(self):
         """
@@ -128,7 +129,7 @@ class Digrafo:
         - maxD (int): O maior grau de um vértice do digrafo.
 
         """
-        return max(self.dist(vert) for vert in self.listaAdjacencia.keys())
+        return max([(self.dist(vert))[0] for vert in self.listaAdjacencia.keys()])
 
     def dist(self, vertice):
         """
@@ -142,7 +143,7 @@ class Digrafo:
 
         """
         vizinhancaPositiva, vizinhancaNegativa = self.vizinhanca(vertice)
-        return len(vizinhancaPositiva) + len(vizinhancaNegativa)
+        return len(vizinhancaPositiva), len(vizinhancaNegativa)
 
     def bfs(self, vertice):
         """
@@ -235,7 +236,7 @@ class Digrafo:
         #Retorna os tempos de descoberta e finalização e os antecessores
         return dicIni, dicFim, dicpi
 
-    def bf(self, vertice):
+    def bellmanford(self, vertice):
         """
         Realiza o algoritmo de Bellman-Ford a partir de um vértice.
 
@@ -274,7 +275,7 @@ class Digrafo:
 
         return d, pi, None
 
-    def djikstra(self, vertice):
+    def dijkstra(self, vertice):
         """
         Realiza o algoritmo de Dijkstra a partir de um vértice.
 
@@ -391,7 +392,7 @@ class Digrafo:
         - maior (tuple): Uma tupla contendo o vértice mais distante e sua distância.
         """
         #Inicializa os atributos da distância e ignoramos o atributo pi retornado pelo Djikstra
-        d, _ = self.djikstra(vertice)
+        d, _ = self.dijkstra(vertice)
         #Obtém o vértice mais distance em relação ao vértice de partida
         maior = max(d.items(), key = lambda x: x[1])
         return maior
@@ -430,3 +431,6 @@ class Digrafo:
         except Exception as e:
             #Caso ocorra algum erro na leitura do arquivo, será emitida uma mensagem de erro
             print("Erro na leitura do arquivo: ", e)
+
+d = Digrafo("_input/USA-NY-road.txt")
+print(d.vizinhanca("45"))
