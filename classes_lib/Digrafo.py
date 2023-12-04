@@ -118,7 +118,7 @@ class Digrafo:
         - minD (int): O menor grau de um vértice do digrafo.
 
         """
-        return min([(self.dist(vert))[0] for vert in self.listaAdjacencia.keys()])
+        return min([(self.dist(vert)) for vert in self.listaAdjacencia.keys()])
 
 
     def maxD(self):
@@ -129,7 +129,7 @@ class Digrafo:
         - maxD (int): O maior grau de um vértice do digrafo.
 
         """
-        return max([(self.dist(vert))[0] for vert in self.listaAdjacencia.keys()])
+        return max([(self.dist(vert)) for vert in self.listaAdjacencia.keys()])
 
     def dist(self, vertice):
         """
@@ -143,7 +143,7 @@ class Digrafo:
 
         """
         vizinhancaPositiva, vizinhancaNegativa = self.vizinhanca(vertice)
-        return len(vizinhancaPositiva), len(vizinhancaNegativa)
+        return len(vizinhancaPositiva) +  len(vizinhancaNegativa)
 
     def bfs(self, vertice):
         """
